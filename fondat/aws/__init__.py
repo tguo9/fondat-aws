@@ -3,23 +3,22 @@
 import aiobotocore
 import dataclasses
 
+from contextlib import contextmanager
 from botocore.exceptions import ClientError
 from fondat.data import datacls
 from fondat.error import error_for_status
-from typing import Annotated as A, Optional
+from typing import Annotated, Optional
 
 
-# fmt: off
 @datacls
 class Config:
-    aws_access_key_id: A[Optional[str], "AWS access key ID"]
-    aws_secret_access_key: A[Optional[str], "AWS secret access key"]
-    aws_session_token: A[Optional[str], "AWS temporary session token"]
-    endpoint_url: A[Optional[str], "URL to use for constructed client"]
-    profile_name: A[Optional[str], "name of the AWS profile to use"]
-    region_name: A[Optional[str], "region to use when creating connections"]
-    verify: A[Optional[bool], "verify TLS certificates"]
-# fmt: on
+    aws_access_key_id: Annotated[Optional[str], "AWS access key ID"]
+    aws_secret_access_key: Annotated[Optional[str], "AWS secret access key"]
+    aws_session_token: Annotated[Optional[str], "AWS temporary session token"]
+    endpoint_url: Annotated[Optional[str], "URL to use for constructed client"]
+    profile_name: Annotated[Optional[str], "name of the AWS profile to use"]
+    region_name: Annotated[Optional[str], "region to use when creating connections"]
+    verify: Annotated[Optional[bool], "verify TLS certificates"]
 
 
 def _asdict(config):
@@ -67,9 +66,6 @@ class Client:
 
     async def __aexit__(self, exc_type, exc_value, traceback):
         await self.close()
-
-
-from contextlib import contextmanager
 
 
 @contextmanager
